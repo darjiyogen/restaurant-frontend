@@ -16,6 +16,12 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "paths": {
+      "restaurant-swagger-client": [
+        "dist/restaurant-swagger-client/restaurant-swagger-client",
+        "dist/restaurant-swagger-client"
+      ]
+    },
     "target": "es2017",
     "module": "es2020",
     "lib": [

@@ -1,0 +1,278 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "Restaurant.API",
+      "version": "1.0"
+    },
+    "paths": {
+      "/Get": {
+        "get": {
+          "tags": [
+            "Reservation"
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ReservationViewModel"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ReservationViewModel"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ReservationViewModel"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/GetReservationById/{ReservationId}": {
+        "get": {
+          "tags": [
+            "Reservation"
+          ],
+          "parameters": [
+            {
+              "name": "ReservationId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/Post": {
+        "post": {
+          "tags": [
+            "Reservation"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationViewModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationViewModel"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationViewModel"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/Put": {
+        "put": {
+          "tags": [
+            "Reservation"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationViewModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationViewModel"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationViewModel"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationViewModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/Delete/{ReservationId}": {
+        "delete": {
+          "tags": [
+            "Reservation"
+          ],
+          "parameters": [
+            {
+              "name": "ReservationId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "CustomerViewModel": {
+          "type": "object",
+          "properties": {
+            "customerId": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "customerName": {
+              "type": "string",
+              "nullable": true
+            },
+            "emailId": {
+              "type": "string",
+              "nullable": true
+            },
+            "phoneNumber": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "ReservationViewModel": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "startTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "table": {
+              "$ref": "#/components/schemas/RestaurantTableViewModel"
+            },
+            "customer": {
+              "$ref": "#/components/schemas/CustomerViewModel"
+            }
+          },
+          "additionalProperties": false
+        },
+        "RestaurantTableViewModel": {
+          "type": "object",
+          "properties": {
+            "tableId": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "name": {
+              "type": "string",
+              "nullable": true
+            },
+            "location": {
+              "type": "string",
+              "nullable": true
+            },
+            "seats": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    }
+  }

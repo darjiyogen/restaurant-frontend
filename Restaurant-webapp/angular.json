@@ -105,6 +105,37 @@
           }
         }
       }
+    },
+    "restaurant-swagger-client": {
+      "projectType": "library",
+      "root": "projects/restaurant-swagger-client",
+      "sourceRoot": "projects/restaurant-swagger-client/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/restaurant-swagger-client/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/restaurant-swagger-client/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/restaurant-swagger-client/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/restaurant-swagger-client/src/test.ts",
+            "tsConfig": "projects/restaurant-swagger-client/tsconfig.spec.json",
+            "karmaConfig": "projects/restaurant-swagger-client/karma.conf.js"
+          }
+        }
+      }
     }
   },
   "defaultProject": "Restaurant-webapp",

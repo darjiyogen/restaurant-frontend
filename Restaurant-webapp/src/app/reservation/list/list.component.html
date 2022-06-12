@@ -1,0 +1,38 @@
+<div>
+  <h4 class="app-title">Scheduler App</h4>
+  <div class="app-filter">
+    <div class="k-form-field k-datetime-picker-wrapper">
+      <span>Seats</span>
+      <kendo-dropdownlist
+        [data]="seatData"
+        textField="text"
+        valueField="value"
+        (valueChange)="onSeatFilterChange($event)"
+      >
+      </kendo-dropdownlist>
+    </div>
+    <div class="k-form-field k-datetime-picker-wrapper">
+      <span>Start</span>
+      <kendo-timepicker class="custom-picker" [value]="filterStart">
+      </kendo-timepicker>
+    </div>
+    <div class="k-form-field k-datetime-picker-wrapper">
+      <span>End</span>
+      <kendo-timepicker class="custom-picker" [value]="filterEnd">
+      </kendo-timepicker>
+    </div>
+  </div>
+  <kendo-scheduler
+    kendoSchedulerSlotSelectable
+    [kendoSchedulerReactiveEditing]="createFormGroup"
+    [kendoSchedulerBinding]="reservation"
+    [group]="group"
+    [resources]="resources"
+    [selectedDate]="selectedDate"
+    style="height: 620px"
+    [(slotSelection)]="selection"
+    [editService]="editService"
+  >
+    <kendo-scheduler-timeline-view> </kendo-scheduler-timeline-view>
+  </kendo-scheduler>
+</div>
