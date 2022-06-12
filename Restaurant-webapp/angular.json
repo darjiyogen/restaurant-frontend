@@ -107,5 +107,8 @@
       }
     }
   },
-  "defaultProject": "Restaurant-webapp"
+  "defaultProject": "Restaurant-webapp",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }
