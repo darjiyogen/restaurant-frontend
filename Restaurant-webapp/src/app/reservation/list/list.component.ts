@@ -56,6 +56,7 @@ export class ListComponent implements OnInit {
     private helperService: HelperService
   ) {
     this.createFormGroup = this.createFormGroup.bind(this);
+    
     this.store
       .select(selectReservations)
       .pipe(takeUntil(this.destroy$))
@@ -119,6 +120,7 @@ export class ListComponent implements OnInit {
       table: dataItem?.table,
       isAllDay: false,
       description: dataItem.description,
+      seats: dataItem.seats
     });
 
     return this.formGroup;

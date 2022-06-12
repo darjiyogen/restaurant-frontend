@@ -5,7 +5,7 @@ import { BaseEditService, SchedulerModelFields } from "@progress/kendo-angular-s
 import { zip, Observable, map, tap } from "rxjs";
 import { Reservation } from "../models/reservation";
 
-const fields: SchedulerModelFields = {
+const fields: any = {
     id: "TaskID",
     title: "Title",
     description: "Description",
@@ -13,6 +13,8 @@ const fields: SchedulerModelFields = {
     start: "Start",
     end: "End",
     endTimezone: "EndTimezone",
+    location: "location",
+    seats: "seates",
   };
 
 @Injectable()

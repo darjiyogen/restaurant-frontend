@@ -17,14 +17,14 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { ReservationViewModel } from '../model/reservationViewModel';
+import { RestaurantTableViewModel } from '../model/restaurantTableViewModel';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class ReservationService {
+export class TableService {
 
     protected basePath = '/';
     public defaultHeaders = new HttpHeaders();
@@ -58,30 +58,13 @@ export class ReservationService {
     /**
      * 
      * 
-     * @param start 
-     * @param end 
-     * @param seat 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reservationGet(start?: Date, end?: Date, seat?: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public reservationGet(start?: Date, end?: Date, seat?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public reservationGet(start?: Date, end?: Date, seat?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public reservationGet(start?: Date, end?: Date, seat?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (start !== undefined && start !== null) {
-            queryParameters = queryParameters.set('Start', <any>start.toISOString());
-        }
-        if (end !== undefined && end !== null) {
-            queryParameters = queryParameters.set('End', <any>end.toISOString());
-        }
-        if (seat !== undefined && seat !== null) {
-            queryParameters = queryParameters.set('Seat', <any>seat);
-        }
+    public tableGet(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public tableGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public tableGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public tableGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -97,48 +80,7 @@ export class ReservationService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/reservation`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param reservationId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public reservationIdDelete(reservationId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public reservationIdDelete(reservationId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public reservationIdDelete(reservationId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public reservationIdDelete(reservationId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (reservationId === null || reservationId === undefined) {
-            throw new Error('Required parameter reservationId was null or undefined when calling reservationIdDelete.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/${encodeURIComponent(String(reservationId))}`,
+        return this.httpClient.request<any>('get',`${this.basePath}/table`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -151,17 +93,17 @@ export class ReservationService {
     /**
      * 
      * 
-     * @param reservationId 
+     * @param tableId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reservationIdGet(reservationId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public reservationIdGet(reservationId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public reservationIdGet(reservationId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public reservationIdGet(reservationId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public tableIdDelete(tableId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public tableIdDelete(tableId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public tableIdDelete(tableId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public tableIdDelete(tableId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (reservationId === null || reservationId === undefined) {
-            throw new Error('Required parameter reservationId was null or undefined when calling reservationIdGet.');
+        if (tableId === null || tableId === undefined) {
+            throw new Error('Required parameter tableId was null or undefined when calling tableIdDelete.');
         }
 
         let headers = this.defaultHeaders;
@@ -178,7 +120,47 @@ export class ReservationService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/${encodeURIComponent(String(reservationId))}`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/${encodeURIComponent(String(tableId))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param tableId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public tableIdGet(tableId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public tableIdGet(tableId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public tableIdGet(tableId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public tableIdGet(tableId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (tableId === null || tableId === undefined) {
+            throw new Error('Required parameter tableId was null or undefined when calling tableIdGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('get',`${this.basePath}/${encodeURIComponent(String(tableId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -195,10 +177,10 @@ export class ReservationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reservationPost(body?: ReservationViewModel, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public reservationPost(body?: ReservationViewModel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public reservationPost(body?: ReservationViewModel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public reservationPost(body?: ReservationViewModel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public tablePost(body?: RestaurantTableViewModel, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public tablePost(body?: RestaurantTableViewModel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public tablePost(body?: RestaurantTableViewModel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public tablePost(body?: RestaurantTableViewModel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
@@ -222,7 +204,7 @@ export class ReservationService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/reservation`,
+        return this.httpClient.request<any>('post',`${this.basePath}/table`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -240,10 +222,10 @@ export class ReservationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public reservationPut(body?: ReservationViewModel, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public reservationPut(body?: ReservationViewModel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public reservationPut(body?: ReservationViewModel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public reservationPut(body?: ReservationViewModel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public tablePut(body?: RestaurantTableViewModel, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public tablePut(body?: RestaurantTableViewModel, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public tablePut(body?: RestaurantTableViewModel, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public tablePut(body?: RestaurantTableViewModel, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
@@ -267,7 +249,7 @@ export class ReservationService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('put',`${this.basePath}/reservation`,
+        return this.httpClient.request<any>('put',`${this.basePath}/table`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
