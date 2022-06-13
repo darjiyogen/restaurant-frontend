@@ -15,12 +15,20 @@
     </div>
     <div class="k-form-field k-datetime-picker-wrapper">
       <span>Start</span>
-      <kendo-timepicker class="custom-picker" (valueChange)="onTimeFilterChange()" [(ngModel)]="filterStart">
+      <kendo-timepicker
+        class="custom-picker"
+        (valueChange)="onTimeFilterChange()"
+        [(ngModel)]="filterStart"
+      >
       </kendo-timepicker>
     </div>
     <div class="k-form-field k-datetime-picker-wrapper">
       <span>End</span>
-      <kendo-timepicker class="custom-picker" (valueChange)="onTimeFilterChange()" [(ngModel)]="filterEnd">
+      <kendo-timepicker
+        class="custom-picker"
+        (valueChange)="onTimeFilterChange()"
+        [(ngModel)]="filterEnd"
+      >
       </kendo-timepicker>
     </div>
   </div>
@@ -37,42 +45,72 @@
   >
     <kendo-scheduler-timeline-view> </kendo-scheduler-timeline-view>
     <ng-template
-    kendoSchedulerEditDialogTemplate
-    autoFocusedElement=".title-input"
-    let-formGroup="formGroup"
-    let-isNew="isNew"
-    let-editMode="editMode"
-  >
-    <div class="k-form-inline">
-      <div class="k-form-field k-datetime-picker-wrapper">
-        <span>Start</span>
-        <kendo-datepicker
-          class="custom-picker"
-          [formControl]="formGroup.get('start')"
-        >
-        </kendo-datepicker>
-        <kendo-timepicker
-          class="custom-picker"
-          [formControl]="formGroup.get('start')"
-          *ngIf="!formGroup.controls.isAllDay.value"
-        >
-        </kendo-timepicker>
+      kendoSchedulerEditDialogTemplate
+      autoFocusedElement=".title-input"
+      let-formGroup="formGroup"
+      let-isNew="isNew"
+      let-editMode="editMode"
+    >
+      <div class="k-form-inline">
+        <div class="k-form-field k-datetime-picker-wrapper">
+          <span>Start</span>
+          <kendo-datepicker
+            class="custom-picker"
+            [formControl]="formGroup.get('start')"
+          >
+          </kendo-datepicker>
+          <kendo-timepicker
+            class="custom-picker"
+            [formControl]="formGroup.get('start')"
+          >
+          </kendo-timepicker>
+        </div>
+        <div class="k-form-field k-datetime-picker-wrapper">
+          <span>End</span>
+          <kendo-datepicker
+            class="custom-picker"
+            [formControl]="formGroup.get('end')"
+          >
+          </kendo-datepicker>
+          <kendo-timepicker
+            class="custom-picker"
+            [formControl]="formGroup.get('end')"
+          >
+          </kendo-timepicker>
+        </div>
+        <div class="k-form-field k-datetime-picker-wrapper">
+          <span>Table</span>
+          <kendo-dropdownlist
+            [data]="tables"
+            textField="name"
+            valueField="tableId"
+            [valuePrimitive]="true"
+            [formControl]="formGroup.get('tableId')"
+          >
+          </kendo-dropdownlist>
+        </div>
+        <div class="k-form-field k-datetime-picker-wrapper">
+          <span>Customer Name</span>
+          <kendo-textbox
+            [formControl]="formGroup.get('customerName')"
+          >
+          </kendo-textbox>
+        </div>
+        <div class="k-form-field k-datetime-picker-wrapper">
+          <span>Customer Email</span>
+          <kendo-textbox
+            [formControl]="formGroup.get('customerEmail')"
+          >
+          </kendo-textbox>
+        </div>
+        <div class="k-form-field k-datetime-picker-wrapper">
+          <span>Customer Ph No</span>
+          <kendo-textbox
+            [formControl]="formGroup.get('customerPhone')"
+          >
+          </kendo-textbox>
+        </div>
       </div>
-      <div class="k-form-field k-datetime-picker-wrapper">
-        <span>End</span>
-        <kendo-datepicker
-          class="custom-picker"
-          [formControl]="formGroup.get('end')"
-        >
-        </kendo-datepicker>
-        <kendo-timepicker
-          class="custom-picker"
-          [formControl]="formGroup.get('end')"
-          *ngIf="!formGroup.controls.isAllDay.value"
-        >
-        </kendo-timepicker>
-      </div>
-    </div>
-  </ng-template>
+    </ng-template>
   </kendo-scheduler>
 </div>

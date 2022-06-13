@@ -20,7 +20,7 @@ import { RestaurantTableViewModel } from 'restaurant-swagger-client';
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListComponent {
+export class ListComponent implements OnInit{
   public tables!: RestaurantTableViewModel[];
   public reservation!: Reservation[];
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -63,8 +63,11 @@ export class ListComponent {
     this.createFormGroup = this.createFormGroup.bind(this);
 
     this.selectTables();
-    this.selectReservation();
     this.store.dispatch(reservationActions.GetTable());
+  }
+
+  ngOnInit(): void {
+    this.selectReservation();
   }
 
   selectReservation() {
@@ -122,7 +125,7 @@ export class ListComponent {
 
     tables.map((table: any) => {
       resTable.push({
-        text: `${table.name} (${table.location})`,
+        text: `${table.name} (${table.location}) - ${table.seats}`,
         value: table.tableId.toString(),
         color: this.helperService.generateRandomColor(),
       });
@@ -155,6 +158,9 @@ export class ListComponent {
       isAllDay: false,
       description: dataItem.description,
       seats: dataItem.seats,
+      customerName: dataItem.customerName,
+      customerEmail: dataItem.customerEmail,
+      customerPhone: dataItem.customerPhone
     });
 
     return this.formGroup;
@@ -166,5 +172,9 @@ export class ListComponent {
 
   onTimeFilterChange() {
     this.loadReservations();
+  }
+
+  createReservation(){
+
   }
 }

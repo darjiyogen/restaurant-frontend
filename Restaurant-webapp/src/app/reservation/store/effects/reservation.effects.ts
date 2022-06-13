@@ -19,29 +19,35 @@ export class ReservationEffects {
     this.actions$.pipe(
       ofType(reservationActions.GetReservation),
       exhaustMap(({ query }) =>
-        this.reservationService.reservationGet(query.start ? new Date(query.start) : undefined, query.end ? new Date(query.end) : undefined, query.seat).pipe(
-          map((response): any => {
-            const reservationOutput = response.map((dataItem: any) => {
-              return this.helperService.convertToSchedulerEvent(dataItem);
-            });
-            return reservationActions.GetReservationSuccess({
-              reservationOutput,
-            });
-          }),
-          catchError((error: any) =>
-            of(reservationActions.GetReservationFailure(error))
+        this.reservationService
+          .reservationGet(
+            query.start ? new Date(query.start) : undefined,
+            query.end ? new Date(query.end) : undefined,
+            query.seat
           )
-        )
-      ),
+          .pipe(
+            map((response): any => {
+              const reservationOutput = response.map((dataItem: any) => {
+                return this.helperService.convertToSchedulerEvent(dataItem);
+              });
+              return reservationActions.GetReservationSuccess({
+                reservationOutput,
+              });
+            }),
+            catchError((error: any) =>
+              of(reservationActions.GetReservationFailure(error))
+            )
+          )
+      )
     )
   );
 
   getTable$ = createEffect(() =>
     this.actions$.pipe(
       ofType(reservationActions.GetTable),
-      exhaustMap(({ }) =>
+      exhaustMap(({}) =>
         this.tableService.tableGet().pipe(
-          map((response): any => {         
+          map((response): any => {
             return reservationActions.GetTableSuccess({
               response,
             });
@@ -50,7 +56,47 @@ export class ReservationEffects {
             of(reservationActions.GetTableFailure(error))
           )
         )
-      ),
+      )
+    )
+  );
+
+  createReservation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(reservationActions.CreateReservation),
+      exhaustMap(reservation => {
+        const reservationVM = this.helperService.convertFromSchedulerEvent(reservation);
+        return this.reservationService.reservationPost(reservationVM).pipe(
+          map((response): any => {
+            const responseVM = this.helperService.convertToSchedulerEvent(response);
+            return reservationActions.CreateReservationSuccess({
+              responseVM,
+            });
+          }),
+          catchError((error: any) => of(reservationActions.CreateReservationFailure(error))
+          )
+        );
+      }
+      )
+    )
+  );
+
+  updateReservation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(reservationActions.UpdateReservation),
+      exhaustMap(reservation => {
+        const reservationVM = this.helperService.convertFromSchedulerEvent(reservation);
+        return this.reservationService.reservationPut(reservationVM).pipe(
+          map((response): any => {
+            const responseVM = this.helperService.convertToSchedulerEvent(response);
+            return reservationActions.UpdateReservationSuccess(
+              JSON.parse(JSON.stringify(responseVM))
+            );
+          }),
+          catchError((error: any) => of(reservationActions.UpdateReservationFailure(error))
+          )
+        );
+      }
+      )
     )
   );
 }

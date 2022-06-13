@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AnyFn } from "@ngrx/store/src/selector";
+import { ReservationViewModel } from "restaurant-swagger-client";
 
 @Injectable()
 export class HelperService{
@@ -28,7 +29,25 @@ export class HelperService{
       location: dataItem?.table?.location,
       table: dataItem?.table,
       isAllDay: false,
-      description : `${dataItem.customer?.customerName} - ${dataItem.customer?.phoneNumber}`
+      description : `${dataItem.customer?.customerName} - ${dataItem.customer?.phoneNumber}`,
+      customer: dataItem.customer
+    }
+  };
+
+  public convertFromSchedulerEvent = (dataItem: any) : ReservationViewModel => {
+     return {
+      startTime: this.parseAdjust(dataItem.start),
+      endTime: this.parseAdjust(dataItem.end),
+      id: dataItem.id || 0,
+      table: {
+        tableId: dataItem?.tableId
+      },
+      customer: {
+        customerId: dataItem?.customer?.customerId || 0,
+        customerName: dataItem?.customerName || dataItem?.customer?.customerName,
+        emailId: dataItem?.customerEmail,
+        phoneNumber: dataItem?.customerPhone
+      }
     }
   };
 
