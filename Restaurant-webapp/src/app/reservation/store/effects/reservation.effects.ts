@@ -68,9 +68,7 @@ export class ReservationEffects {
         return this.reservationService.reservationPost(reservationVM).pipe(
           map((response): any => {
             const responseVM = this.helperService.convertToSchedulerEvent(response);
-            return reservationActions.CreateReservationSuccess({
-              responseVM,
-            });
+            return reservationActions.CreateReservationSuccess(JSON.parse(JSON.stringify(responseVM)));
           }),
           catchError((error: any) => of(reservationActions.CreateReservationFailure(error))
           )
