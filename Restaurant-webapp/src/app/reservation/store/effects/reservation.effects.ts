@@ -15,6 +15,7 @@ export class ReservationEffects {
     private helperService: HelperService
   ) {}
 
+  // Get Reservations with filter : Start, End and Seat
   getReservations$ = createEffect(() =>
     this.actions$.pipe(
       ofType(reservationActions.GetReservation),
@@ -42,6 +43,7 @@ export class ReservationEffects {
     )
   );
 
+  // Get list of Tables
   getTable$ = createEffect(() =>
     this.actions$.pipe(
       ofType(reservationActions.GetTable),
@@ -60,41 +62,59 @@ export class ReservationEffects {
     )
   );
 
+  // Create new Reservations
   createReservation$ = createEffect(() =>
     this.actions$.pipe(
       ofType(reservationActions.CreateReservation),
-      exhaustMap(reservation => {
-        const reservationVM = this.helperService.convertFromSchedulerEvent(reservation);
+      exhaustMap((reservation) => {
+        const reservationVM =
+          this.helperService.convertFromSchedulerEvent(reservation);
         return this.reservationService.reservationPost(reservationVM).pipe(
           map((response): any => {
-            const responseVM = this.helperService.convertToSchedulerEvent(response);
-            return reservationActions.CreateReservationSuccess(JSON.parse(JSON.stringify(responseVM)));
+            const responseVM =
+              this.helperService.convertToSchedulerEvent(response);
+            return reservationActions.CreateReservationSuccess(
+              JSON.parse(JSON.stringify(responseVM))
+            );
           }),
-          catchError((error: any) => of(reservationActions.CreateReservationFailure(error))
+          catchError((error: any) =>
+            of(reservationActions.CreateReservationFailure(error))
           )
         );
-      }
-      )
+      })
     )
   );
 
+  // Update Reservation
   updateReservation$ = createEffect(() =>
     this.actions$.pipe(
       ofType(reservationActions.UpdateReservation),
-      exhaustMap(reservation => {
-        const reservationVM = this.helperService.convertFromSchedulerEvent(reservation);
+      exhaustMap((reservation) => {
+        const reservationVM =
+          this.helperService.convertFromSchedulerEvent(reservation);
         return this.reservationService.reservationPut(reservationVM).pipe(
           map((response): any => {
-            const responseVM = this.helperService.convertToSchedulerEvent(response);
+            const responseVM =
+              this.helperService.convertToSchedulerEvent(response);
             return reservationActions.UpdateReservationSuccess(
               JSON.parse(JSON.stringify(responseVM))
             );
           }),
-          catchError((error: any) => of(reservationActions.UpdateReservationFailure(error))
+          catchError((error: any) =>
+            of(reservationActions.UpdateReservationFailure(error))
           )
         );
-      }
-      )
+      })
+    )
+  );
+
+  // Delete Reservation
+  deleteReservation$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(reservationActions.DeleteReservation),
+      exhaustMap((reservation) => {
+        return of(reservationActions.DeleteReservationSuccess(reservation))
+      })
     )
   );
 }

@@ -15,7 +15,7 @@ export const initialState: ReservationState = {
   reservations: [],
   query: {},
   tables: [],
-  reservation: null
+  reservation: null,
 };
 
 export const reducer = createReducer(
@@ -28,30 +28,50 @@ export const reducer = createReducer(
     reservations: result.reservationOutput,
     query: state.query,
     tables: state.tables,
-    reservation: null
+    reservation: null,
   })),
   on(ReservationActions.GetTable, (state: ReservationState) => ({ ...state })),
   on(ReservationActions.GetTableSuccess, (state, result) => ({
     tables: result.response,
     query: state.query,
     reservations: state.reservations,
-    reservation: null
+    reservation: null,
   })),
-  on(ReservationActions.CreateReservation, (state: ReservationState) => ({ ...state })),
+  on(ReservationActions.CreateReservation, (state: ReservationState) => ({
+    ...state,
+  })),
   on(ReservationActions.CreateReservationSuccess, (state, result) => ({
     tables: result.response,
     query: state.query,
     reservations: [...state.reservations, result],
-    reservation: null
+    reservation: null,
   })),
-  on(ReservationActions.UpdateReservation, (state: ReservationState) => ({ ...state })),
+  on(ReservationActions.UpdateReservation, (state: ReservationState) => ({
+    ...state,
+  })),
   on(ReservationActions.UpdateReservationSuccess, (state, result) => {
-    const updatedArr = state.reservations.map(u => u.id !== result.id ? u : result);
+    const updatedArr = state.reservations.map((u) =>
+      u.id !== result.id ? u : result
+    );
     return {
       tables: state.tables,
       query: state.query,
       reservations: [...updatedArr],
-      reservation: null
-    }
+      reservation: null,
+    };
+  }),
+  on(ReservationActions.DeleteReservation, (state: ReservationState) => ({
+    ...state,
+  })),
+  on(ReservationActions.DeleteReservationSuccess, (state, result) => {
+    const index = state.reservations.findIndex((x) => x.id == result.id);
+    const updatedArr = [...state.reservations];
+    updatedArr.splice(index, 1);
+    return {
+      tables: state.tables,
+      query: state.query,
+      reservations: updatedArr,
+      reservation: null,
+    };
   })
 );

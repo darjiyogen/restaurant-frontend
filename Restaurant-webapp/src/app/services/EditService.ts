@@ -42,7 +42,8 @@ export class EditService extends BaseEditService<Reservation> {
   ): void {
     const completed = [];
     if (deleted.length) {
-    
+      const reservation = deleted[0];
+      this.store.dispatch(reservationActions.DeleteReservation(JSON.parse(JSON.stringify(reservation))));
     }
 
     if (updated.length) {

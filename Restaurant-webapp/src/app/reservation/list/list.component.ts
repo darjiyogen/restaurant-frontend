@@ -67,6 +67,7 @@ export class ListComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    // Bind to reservation selection
     this.selectReservation();
   }
 
@@ -99,6 +100,7 @@ export class ListComponent implements OnInit{
       });
   }
 
+  // Load reservation with filters
   loadReservations() {
     var query = {} as any;
     if (this.filterSeat) {
@@ -113,9 +115,11 @@ export class ListComponent implements OnInit{
 
     query =  JSON.parse(JSON.stringify(query));
 
+    // Dispatch action to get filter reservation
     this.store.dispatch(reservationActions.GetReservation({ query }));
   }
 
+  // Helper function to set Table name column
   setTable(tables: any[]) {
     if (!tables.length) {
       return;
@@ -123,6 +127,7 @@ export class ListComponent implements OnInit{
     let resTable: any[] = [];
     this.group.resources = ['Table'];
 
+    // Set text as Name Location No of Seats
     tables.map((table: any) => {
       resTable.push({
         text: `${table.name} (${table.location}) - ${table.seats}`,
@@ -143,6 +148,7 @@ export class ListComponent implements OnInit{
     ];
   }
 
+  // Helper function to create add/edit form
   public createFormGroup(args: any): FormGroup {
     const dataItem = { ...args.dataItem };
 
@@ -166,15 +172,13 @@ export class ListComponent implements OnInit{
     return this.formGroup;
   }
 
+  // On Seat filter change
   onSeatFilterChange(evt: any) {
     this.loadReservations();
   }
 
+  // On Start and End time filter change
   onTimeFilterChange() {
     this.loadReservations();
-  }
-
-  createReservation(){
-
   }
 }

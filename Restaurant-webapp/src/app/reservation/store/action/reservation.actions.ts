@@ -23,6 +23,13 @@ export const UpdateReservation = createAction(
 export const UpdateReservationSuccess = createAction('[Reservation] Update Reservation Success', props<any>());
 export const UpdateReservationFailure = createAction('[Reservation] Update Reservation Failure', props<{any: any}>());
 
+export const DeleteReservation = createAction(
+  '[Reservation] Delete Reservations',
+  props<any>()
+);
+export const DeleteReservationSuccess = createAction('[Reservation] Delete Reservation Success', props<any>());
+export const DeleteReservationFailure = createAction('[Reservation] Delete Reservation Failure', props<{any: any}>());
+
 
 export const GetTable = createAction(
   '[Table] Get Table'
