@@ -9,3 +9,8 @@ export const selectReservations = createSelector(
     selectReservationState,
   (state: fromReservation.ReservationState) => state.reservations
 );
+
+export const selectTable = createSelector(
+  selectReservationState,
+(state: fromReservation.ReservationState) => state.tables
+);

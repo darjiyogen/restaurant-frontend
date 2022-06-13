@@ -1,15 +1,18 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
 import { Reservation } from 'src/app/models/reservation';
 import { ReservationState } from '../store/reducer/reservation.reducer';
-import { selectReservations } from '../store/selector/reservation.selectors';
+import {
+  selectReservations,
+  selectTable,
+} from '../store/selector/reservation.selectors';
 import * as reservationActions from '../store/action/reservation.actions';
 import { EditMode, SlotRange } from '@progress/kendo-angular-scheduler';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EditService } from 'src/app/services/EditService';
 import { HelperService } from 'src/app/services/HelperService';
-
+import { RestaurantTableViewModel } from 'restaurant-swagger-client';
 
 @Component({
   selector: 'app-list',
@@ -17,7 +20,8 @@ import { HelperService } from 'src/app/services/HelperService';
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListComponent implements OnInit {
+export class ListComponent {
+  public tables!: RestaurantTableViewModel[];
   public reservation!: Reservation[];
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -25,7 +29,6 @@ export class ListComponent implements OnInit {
   public selection: SlotRange = {
     start: new Date(new Date().setHours(0, 0, 0, 0)),
     end: new Date(new Date().setHours(23, 30, 0, 0)),
-    isAllDay: true,
   };
 
   public group: any = {
@@ -45,52 +48,85 @@ export class ListComponent implements OnInit {
     { text: '7+', value: 7 },
     { text: '8+', value: 8 },
   ];
+  public filterSeat!: Number;
 
   public filterStart!: Date;
-  public filterEnd! : Date ;
+  public filterEnd!: Date;
 
   constructor(
     private store: Store<ReservationState>,
     private formBuilder: FormBuilder,
     public editService: EditService,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private cdr: ChangeDetectorRef
   ) {
     this.createFormGroup = this.createFormGroup.bind(this);
-    
+
+    this.selectTables();
+    this.selectReservation();
+    this.store.dispatch(reservationActions.GetTable());
+  }
+
+  selectReservation() {
     this.store
       .select(selectReservations)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        if (data.length) {
-          this.setResoueces(data);
-          const clonedData = JSON.parse(JSON.stringify(data));
-          this.reservation = clonedData.map((x: any) => {
-            return {
-              ...x,
-              start: this.helperService.parseAdjust(x.start),
-              end: this.helperService.parseAdjust(x.end),
-            };
-          });
-        }
+      .subscribe((res) => {
+        const clonedData = JSON.parse(JSON.stringify(res));
+        this.reservation = clonedData.map((x: any) => {
+          return {
+            ...x,
+            start: this.helperService.parseAdjust(x.start),
+            end: this.helperService.parseAdjust(x.end),
+          };
+        });
+
+        this.cdr.detectChanges();
       });
-    this.store.dispatch(reservationActions.GetReservation());
   }
 
-  setResoueces(reservations: any[]) {
+  selectTables() {
+    this.store
+      .select(selectTable)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.tables = res;
+        this.setTable(res);
+        this.loadReservations();
+      });
+  }
+
+  loadReservations() {
+    var query = {} as any;
+    if (this.filterSeat) {
+      query.seat = this.filterSeat;
+    }
+    if (this.filterStart) {
+      query.start = this.helperService.parseAdjust(this.filterStart);
+    }
+    if (this.filterEnd) {
+      query.end = this.helperService.parseAdjust(this.filterEnd);
+    }
+
+    query =  JSON.parse(JSON.stringify(query));
+
+    this.store.dispatch(reservationActions.GetReservation({ query }));
+  }
+
+  setTable(tables: any[]) {
+    if (!tables.length) {
+      return;
+    }
     let resTable: any[] = [];
+    this.group.resources = ['Table'];
 
-    const groupTable: any[] = this.helperService.groupBy(reservations, 'tableId');
-
-    Object.keys(groupTable).map((key: any) => {
-      const location = groupTable[key][0].location;
+    tables.map((table: any) => {
       resTable.push({
-        text: `Table ${key} (${location})`,
-        value: key,
+        text: `${table.name} (${table.location})`,
+        value: table.tableId.toString(),
         color: this.helperService.generateRandomColor(),
       });
     });
-
-    this.group.resources = ['Table'];
 
     this.resources = [
       {
@@ -103,8 +139,6 @@ export class ListComponent implements OnInit {
       },
     ];
   }
-
-  ngOnInit(): void {}
 
   public createFormGroup(args: any): FormGroup {
     const dataItem = { ...args.dataItem };
@@ -120,13 +154,17 @@ export class ListComponent implements OnInit {
       table: dataItem?.table,
       isAllDay: false,
       description: dataItem.description,
-      seats: dataItem.seats
+      seats: dataItem.seats,
     });
 
     return this.formGroup;
   }
 
   onSeatFilterChange(evt: any) {
-    console.log(evt);
+    this.loadReservations();
+  }
+
+  onTimeFilterChange() {
+    this.loadReservations();
   }
 }

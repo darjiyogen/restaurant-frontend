@@ -7,18 +7,20 @@
         [data]="seatData"
         textField="text"
         valueField="value"
+        [valuePrimitive]="true"
+        [(ngModel)]="filterSeat"
         (valueChange)="onSeatFilterChange($event)"
       >
       </kendo-dropdownlist>
     </div>
     <div class="k-form-field k-datetime-picker-wrapper">
       <span>Start</span>
-      <kendo-timepicker class="custom-picker" [value]="filterStart">
+      <kendo-timepicker class="custom-picker" (valueChange)="onTimeFilterChange()" [(ngModel)]="filterStart">
       </kendo-timepicker>
     </div>
     <div class="k-form-field k-datetime-picker-wrapper">
       <span>End</span>
-      <kendo-timepicker class="custom-picker" [value]="filterEnd">
+      <kendo-timepicker class="custom-picker" (valueChange)="onTimeFilterChange()" [(ngModel)]="filterEnd">
       </kendo-timepicker>
     </div>
   </div>
@@ -42,16 +44,6 @@
     let-editMode="editMode"
   >
     <div class="k-form-inline">
-      <div class="k-form-field">
-        <span>Title</span>
-        <input
-          kendoTextBox
-          id="title-input"
-          class="k-rounded-md"
-          placeholder="Title"
-          [formControl]="formGroup.get('title')"
-        />
-      </div>
       <div class="k-form-field k-datetime-picker-wrapper">
         <span>Start</span>
         <kendo-datepicker
